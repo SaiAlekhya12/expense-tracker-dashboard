@@ -3,77 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Tracker</title>
+    <title>Expense Tracker Dashboard</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
 <div class="container">
 
-    <h1>Expense Tracker</h1>
+    <!-- HEADER -->
 
-    <form id="expenseForm">
+    <div style="display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:20px;">
+
+        <h1 style="margin:0;">
+            💰 Expense Tracker Dashboard
+        </h1>
+
+        <div style="display:flex;gap:10px;">
+
+            <button onclick="toggleDarkMode()">
+                🌙 Dark Mode
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+
+    <div class="dashboard">
+
+        <div class="card">
+            <h3>Total Expenses</h3>
+            <p id="totalExpense">₹0</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Transactions</h3>
+            <p id="transactionCount">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Monthly Budget</h3>
+            <p id="budgetAmount">₹0</p>
+        </div>
+
+        <div class="card">
+            <h3>Remaining Budget</h3>
+            <p id="remainingBudget">₹0</p>
+        </div>
+
+    </div>
+
+    <!-- BUDGET MANAGEMENT -->
+
+    <div class="form-container">
+
+        <h2>💰 Budget Management</h2>
+
+        <div style="display:flex;gap:15px;margin-top:15px;">
+
+            <input
+                type="number"
+                id="budgetInput"
+                placeholder="Set Monthly Budget">
+
+            <button
+                type="button"
+                onclick="saveBudget()">
+
+                Save Budget
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- BUDGET PROGRESS -->
+
+    <div class="budget-section">
+
+        <h3>Budget Usage</h3>
+
+        <div class="progress-container">
+
+            <div
+                id="progressBar"
+                class="progress-bar">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ADD EXPENSE -->
+
+    <div class="form-container">
+
+        <h2>📝 Add Expense</h2>
+
+        <form id="expenseForm">
+
+            <input
+                type="text"
+                id="title"
+                placeholder="Title"
+                required>
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Amount"
+                required>
+
+            <select id="category">
+
+                <option>Food</option>
+                <option>Travel</option>
+                <option>Shopping</option>
+                <option>Education</option>
+                <option>Health</option>
+                <option>Bills</option>
+
+            </select>
+
+            <input
+                type="date"
+                id="date"
+                required>
+
+            <input
+                type="text"
+                id="description"
+                placeholder="Description">
+
+            <button type="submit">
+
+                Add Expense
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- EXPENSE TABLE -->
+
+    <div class="table-container">
 
         <input
             type="text"
-            id="title"
-            placeholder="Title"
-            required>
+            id="search"
+            placeholder="🔍 Search expenses...">
 
-        <input
-            type="number"
-            id="amount"
-            placeholder="Amount"
-            required>
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:15px;">
 
-        <input
-            type="text"
-            id="category"
-            placeholder="Category"
-            required>
+            <h2>Expense List</h2>
 
-        <input
-            type="date"
-            id="date"
-            required>
+            <button onclick="exportCSV()">
 
-        <input
-            type="text"
-            id="description"
-            placeholder="Description">
+                Export CSV
 
-        <button type="submit">
-            Add Expense
-        </button>
+            </button>
 
-    </form>
+        </div>
 
-    <h2>Expense List</h2>
+        <table>
 
-    <table>
+            <thead>
 
-        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
 
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Action</th>
-        </tr>
+            </thead>
 
-        </thead>
+            <tbody id="expenseTable">
 
-        <tbody id="expenseTable">
+            </tbody>
 
-        </tbody>
+        </table>
 
-    </table>
+    </div>
+
+    <!-- ANALYTICS -->
+
+    <div class="table-container">
+
+        <h2>📊 Expense Analytics</h2>
+
+        <div class="chart-wrapper">
+
+            <canvas id="expenseChart">
+
+            </canvas>
+
+        </div>
+
+    </div>
 
 </div>
 
-<script src="script.js"></script>
+<script src="script.js?v=1000"></script>
 
 </body>
 </html>
