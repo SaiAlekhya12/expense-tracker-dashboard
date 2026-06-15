@@ -26,31 +26,49 @@ let allExpenses = [];
 let chart;
 let monthlyBudget = 0;
 
+/* ---------------------------
+   Load Transactions
+---------------------------- */
+
 async function loadExpenses() {
 
-    const response =
-        await fetch("/api/expenses");
+    try {
 
-    allExpenses =
-        await response.json();
+        const response =
+            await fetch("/api/expenses");
 
-    renderExpenses(allExpenses);
+        allExpenses =
+            await response.json();
 
-    updateDashboard();
+        renderExpenses(allExpenses);
 
-    renderChart();
+        updateDashboard();
+
+        renderChart();
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load transactions:",
+            error
+        );
+    }
 }
+
+/* ---------------------------
+   Render Table
+---------------------------- */
 
 function renderExpenses(expenses) {
 
     table.innerHTML = "";
 
-    if(expenses.length === 0){
+    if (expenses.length === 0) {
 
         table.innerHTML = `
         <tr>
             <td colspan="7" style="text-align:center;">
-                No expenses found
+                No transactions found
             </td>
         </tr>
         `;
@@ -80,7 +98,11 @@ function renderExpenses(expenses) {
     });
 }
 
-function saveBudget(){
+/* ---------------------------
+   Budget Management
+---------------------------- */
+
+function saveBudget() {
 
     monthlyBudget =
         Number(budgetInput.value);
@@ -112,7 +134,7 @@ function updateDashboard() {
     remainingBudgetElement.textContent =
         `₹${remaining}`;
 
-    if(monthlyBudget > 0){
+    if (monthlyBudget > 0) {
 
         const percentage =
             Math.min(
@@ -123,18 +145,22 @@ function updateDashboard() {
         progressBar.style.width =
             percentage + "%";
 
-        if(percentage > 80){
+        if (percentage > 80) {
 
             progressBar.style.background =
-                "#ff4d4d";
+                "#dc2626";
 
-        }else{
+        } else {
 
             progressBar.style.background =
-                "linear-gradient(90deg,#00c853,#64dd17)";
+                "linear-gradient(90deg,#16a34a,#22c55e)";
         }
     }
 }
+
+/* ---------------------------
+   Analytics Chart
+---------------------------- */
 
 function renderChart() {
 
@@ -158,8 +184,7 @@ function renderChart() {
     const values =
         Object.values(categoryTotals);
 
-    if(chart){
-
+    if (chart) {
         chart.destroy();
     }
 
@@ -169,28 +194,34 @@ function renderChart() {
 
         data: {
 
-            labels: labels,
+            labels,
 
-            datasets: [{
-                data: values,
+            datasets: [
+                {
+                    data: values,
 
-                backgroundColor:[
-                    "#667eea",
-                    "#764ba2",
-                    "#43e97b",
-                    "#fa709a",
-                    "#4facfe",
-                    "#f6d365"
-                ]
-            }]
+                    backgroundColor: [
+                        "#111827",
+                        "#374151",
+                        "#6B7280",
+                        "#9CA3AF",
+                        "#D1D5DB",
+                        "#4B5563"
+                    ]
+                }
+            ]
         },
 
-        options:{
-            responsive:true,
-            maintainAspectRatio:false
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
 }
+
+/* ---------------------------
+   Search
+---------------------------- */
 
 searchInput.addEventListener("input", () => {
 
@@ -200,11 +231,15 @@ searchInput.addEventListener("input", () => {
     const filtered =
         allExpenses.filter(expense =>
 
-            expense.title.toLowerCase().includes(keyword)
+            expense.title
+                .toLowerCase()
+                .includes(keyword)
 
             ||
 
-            expense.category.toLowerCase().includes(keyword)
+            expense.category
+                .toLowerCase()
+                .includes(keyword)
 
             ||
 
@@ -216,46 +251,106 @@ searchInput.addEventListener("input", () => {
     renderExpenses(filtered);
 });
 
-form.addEventListener("submit", async (e) => {
+/* ---------------------------
+   Add Transaction
+---------------------------- */
 
-    e.preventDefault();
+form.addEventListener(
+    "submit",
+    async (e) => {
 
-    const expense = {
+        e.preventDefault();
 
-        title: title.value,
-        amount: amount.value,
-        category: category.value,
-        date: date.value,
-        description: description.value
-    };
+        const expense = {
 
-    await fetch("/api/expenses", {
+            title: title.value,
+            amount: amount.value,
+            category: category.value,
+            date: date.value,
+            description: description.value
+        };
 
-        method:"POST",
+        try {
 
-        headers:{
-            "Content-Type":"application/json"
-        },
+            await fetch(
+                "/api/expenses",
+                {
+                    method: "POST",
 
-        body:JSON.stringify(expense)
-    });
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-    form.reset();
+                    body:
+                        JSON.stringify(expense)
+                }
+            );
 
-    loadExpenses();
-});
+            form.reset();
 
-async function deleteExpense(id){
+            loadExpenses();
 
-    await fetch(`/api/expenses/${id}`,{
+        } catch (error) {
 
-        method:"DELETE"
-    });
+            console.error(
+                "Failed to add transaction:",
+                error
+            );
+        }
+    }
+);
 
-    loadExpenses();
+/* ---------------------------
+   Delete Transaction
+---------------------------- */
+
+async function deleteExpense(id) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this transaction?"
+        );
+
+    if (!confirmed) return;
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/expenses/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Delete request failed"
+            );
+        }
+
+        loadExpenses();
+
+    } catch (error) {
+
+        console.error(
+            "Delete failed:",
+            error
+        );
+
+        alert(
+            "Unable to delete transaction. Check backend API."
+        );
+    }
 }
 
-function exportCSV(){
+/* ---------------------------
+   Export CSV
+---------------------------- */
+
+function exportCSV() {
 
     let csv =
         "Title,Amount,Category,Date,Description\n";
@@ -273,7 +368,10 @@ function exportCSV(){
     const blob =
         new Blob(
             [csv],
-            {type:"text/csv"}
+            {
+                type:
+                    "text/csv"
+            }
         );
 
     const url =
@@ -285,7 +383,7 @@ function exportCSV(){
     a.href = url;
 
     a.download =
-        "expenses.csv";
+        "transaction-report.csv";
 
     document.body.appendChild(a);
 
@@ -294,10 +392,19 @@ function exportCSV(){
     document.body.removeChild(a);
 }
 
-loadExpenses();
-function toggleDarkMode(){
+/* ---------------------------
+   Theme Toggle
+---------------------------- */
+
+function toggleDarkMode() {
 
     document.body.classList.toggle(
         "dark-mode"
     );
 }
+
+/* ---------------------------
+   Initialize
+---------------------------- */
+
+loadExpenses();

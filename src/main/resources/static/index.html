@@ -16,19 +16,21 @@
 
     <!-- HEADER -->
 
-    <div style="display:flex;
-                justify-content:space-between;
-                align-items:center;
-                margin-bottom:20px;">
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:20px;
+    ">
 
         <h1 style="margin:0;">
-            💰 Expense Tracker Dashboard
+            Expense Tracker Dashboard
         </h1>
 
-        <div style="display:flex;gap:10px;">
+        <div style="display:flex; gap:10px;">
 
             <button onclick="toggleDarkMode()">
-                🌙 Dark Mode
+                Toggle Theme
             </button>
 
         </div>
@@ -61,36 +63,36 @@
 
     </div>
 
-    <!-- BUDGET MANAGEMENT -->
+    <!-- BUDGET PLANNING -->
 
     <div class="form-container">
 
-        <h2>💰 Budget Management</h2>
+        <h2>Budget Planning</h2>
 
-        <div style="display:flex;gap:15px;margin-top:15px;">
+        <div style="display:flex; gap:15px; margin-top:15px;">
 
             <input
                 type="number"
                 id="budgetInput"
-                placeholder="Set Monthly Budget">
+                placeholder="Set Monthly Budget"
+            >
 
             <button
                 type="button"
-                onclick="saveBudget()">
-
+                onclick="saveBudget()"
+            >
                 Save Budget
-
             </button>
 
         </div>
 
     </div>
 
-    <!-- BUDGET PROGRESS -->
+    <!-- BUDGET UTILIZATION -->
 
     <div class="budget-section">
 
-        <h3>Budget Usage</h3>
+        <h3>Budget Utilization</h3>
 
         <div class="progress-container">
 
@@ -107,7 +109,7 @@
 
     <div class="form-container">
 
-        <h2>📝 Add Expense</h2>
+        <h2>Add Expenses</h2>
 
         <form id="expenseForm">
 
@@ -115,13 +117,15 @@
                 type="text"
                 id="title"
                 placeholder="Title"
-                required>
+                required
+            >
 
             <input
                 type="number"
                 id="amount"
                 placeholder="Amount"
-                required>
+                required
+            >
 
             <select id="category">
 
@@ -137,44 +141,44 @@
             <input
                 type="date"
                 id="date"
-                required>
+                required
+            >
 
             <input
                 type="text"
                 id="description"
-                placeholder="Description">
+                placeholder="Description"
+            >
 
             <button type="submit">
-
                 Add Expense
-
             </button>
 
         </form>
 
     </div>
 
-    <!-- EXPENSE TABLE -->
+    <!-- EXPENSE LIST -->
 
     <div class="table-container">
 
         <input
             type="text"
             id="search"
-            placeholder="🔍 Search expenses...">
+            placeholder="Search expenses..."
+        >
 
         <div style="
             display:flex;
             justify-content:space-between;
             align-items:center;
-            margin-bottom:15px;">
+            margin-bottom:15px;
+        ">
 
             <h2>Expense List</h2>
 
             <button onclick="exportCSV()">
-
-                Export CSV
-
+                Export Report
             </button>
 
         </div>
@@ -203,11 +207,11 @@
 
     </div>
 
-    <!-- ANALYTICS -->
+    <!-- EXPENSE ANALYTICS -->
 
     <div class="table-container">
 
-        <h2>📊 Expense Analytics</h2>
+        <h2>Expense Analytics</h2>
 
         <div class="chart-wrapper">
 

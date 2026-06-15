@@ -1,4 +1,4 @@
-# 💰 Expense Tracker Dashboard
+# Expense Tracker Dashboard
 
 A full-stack Expense Tracker application built using Java, Spring Boot, Spring Data JPA, H2 Database, HTML, CSS, JavaScript, and Chart.js.
 
